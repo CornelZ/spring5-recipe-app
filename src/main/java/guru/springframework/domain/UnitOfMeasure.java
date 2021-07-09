@@ -10,16 +10,16 @@ public class UnitOfMeasure {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long Id;
+  private Long id;
 
   private String description;
 
   public Long getId() {
-    return Id;
+    return id;
   }
 
   public void setId(Long id) {
-    Id = id;
+    this.id = id;
   }
 
   public String getDescription() {
@@ -28,5 +28,16 @@ public class UnitOfMeasure {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("UnitOfMeasure [id=");
+    builder.append(id);
+    builder.append(", description=");
+    builder.append(description);
+    builder.append("]");
+    return builder.toString();
   }
 }

@@ -41,4 +41,17 @@ public class Category {
   public void setRecipes(Set<Recipe> recipes) {
     this.recipes = recipes;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("Category [id=");
+    builder.append(id);
+    builder.append(", description=");
+    builder.append(description);
+    builder.append(", recipes=");
+    builder.append(recipes);
+    builder.append("]");
+    return builder.toString();
+  }
 }
