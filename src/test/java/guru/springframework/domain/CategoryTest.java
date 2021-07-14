@@ -19,10 +19,4 @@ public class CategoryTest {
     category.setId(idValue);
     assertEquals(idValue, category.getId());
   }
-
-  @Test
-  public void testGetDescription() {}
-
-  @Test
-  public void testGetRecipes() {}
 }
