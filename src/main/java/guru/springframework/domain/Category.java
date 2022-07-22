@@ -2,11 +2,13 @@ package guru.springframework.domain;
 
 import javax.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.util.Set;
 
 /** Created by jt on 6/13/17. */
-@Entity
 @Data
+@EqualsAndHashCode(exclude = {"recipes"})
+@Entity
 public class Category {
 
   @Id
@@ -15,6 +17,6 @@ public class Category {
 
   private String description;
 
-  @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy = "categories")
   private Set<Recipe> recipes;
 }

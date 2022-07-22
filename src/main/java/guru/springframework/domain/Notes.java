@@ -2,9 +2,11 @@ package guru.springframework.domain;
 
 import javax.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Entity
 @Data
+@EqualsAndHashCode(exclude = {"recipe"})
+@Entity
 public class Notes {
 
   @Id
