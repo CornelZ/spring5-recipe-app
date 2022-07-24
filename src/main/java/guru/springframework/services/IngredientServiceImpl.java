@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class IngredientServiceImpl implements IngredientService {
 
-  private final IngredientToIngredientCommand ingredientToIngredientCommand;
   private final RecipeRepository recipeRepository;
   private final UnitOfMeasureRepository unitOfMeasureRepository;
+  private final IngredientToIngredientCommand ingredientToIngredientCommand;
   private final IngredientCommandToIngredient ingredientCommandToIngredient;
 
   public IngredientServiceImpl(
@@ -61,6 +61,7 @@ public class IngredientServiceImpl implements IngredientService {
   @Override
   @Transactional
   public IngredientCommand saveIngredientCommand(IngredientCommand command) {
+    log.debug("command01: {}", command);
     Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
 
     if (!recipeOptional.isPresent()) {
@@ -86,17 +87,66 @@ public class IngredientServiceImpl implements IngredientService {
                 .orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); // todo address this
       } else {
         // add new Ingredient
-        recipe.addIngredient(ingredientCommandToIngredient.convert(command));
+        log.debug("command02: {}", command);
+        Ingredient ingredient = ingredientCommandToIngredient.convert(command);
+        log.debug("ingredient: {}", ingredient);
+        ingredient.setRecipe(recipe);
+        recipe.addIngredient(ingredient);
       }
 
       Recipe savedRecipe = recipeRepository.save(recipe);
 
-      // to do check for fail
-      return ingredientToIngredientCommand.convert(
+      Optional<Ingredient> savedIngredientOptional =
           savedRecipe.getIngredients().stream()
               .filter(recipeIngredients -> recipeIngredients.getId().equals(command.getId()))
-              .findFirst()
-              .get());
+              .findFirst();
+
+      // check by description
+      if (!savedIngredientOptional.isPresent()) {
+        // not totally safe... But best guess
+        savedIngredientOptional =
+            savedRecipe.getIngredients().stream()
+                .filter(
+                    recipeIngredients ->
+                        recipeIngredients.getDescription().equals(command.getDescription()))
+                .filter(
+                    recipeIngredients -> recipeIngredients.getAmount().equals(command.getAmount()))
+                .filter(
+                    recipeIngredients ->
+                        recipeIngredients.getUom().getId().equals(command.getUom().getId()))
+                .findFirst();
+      }
+
+      // to do check for fail
+      return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
+    }
+  }
+
+  @Override
+  public void deleteById(Long recipeId, Long idToDelete) {
+
+    log.debug("Deleting ingredient: " + recipeId + ":" + idToDelete);
+
+    Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+
+    if (recipeOptional.isPresent()) {
+      Recipe recipe = recipeOptional.get();
+      log.debug("found recipe");
+
+      Optional<Ingredient> ingredientOptional =
+          recipe.getIngredients().stream()
+              .filter(ingredient -> ingredient.getId().equals(idToDelete))
+              .findFirst();
+
+      if (ingredientOptional.isPresent()) {
+        log.debug("found Ingredient");
+        Ingredient ingredientToDelete = ingredientOptional.get();
+        ingredientToDelete.setRecipe(null);
+        recipe.getIngredients().remove(ingredientOptional.get());
+        recipeRepository.save(recipe);
+      }
+    } else {
+      log.debug("Recipe Id Not found. Id:" + recipeId);
     }
   }
 }
