@@ -2,12 +2,14 @@ package guru.springframework.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.anyLong;
 
+import guru.springframework.converters.RecipeCommandToRecipe;
+import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import java.util.HashSet;
@@ -26,6 +28,8 @@ public class RecipeServiceImplTest {
   private RecipeService recipeService;
 
   @Mock private RecipeRepository recipeRepository;
+  @Mock RecipeToRecipeCommand recipeToRecipeCommand;
+  @Mock RecipeCommandToRecipe recipeCommandToRecipe;
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {}
@@ -36,7 +40,8 @@ public class RecipeServiceImplTest {
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    recipeService = new RecipeServiceImpl(recipeRepository);
+    recipeService =
+        new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
   }
 
   @After
