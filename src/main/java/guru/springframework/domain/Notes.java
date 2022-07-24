@@ -3,6 +3,7 @@ package guru.springframework.domain;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(exclude = {"recipe"})
@@ -13,7 +14,7 @@ public class Notes {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne private Recipe recipe;
+  @ToString.Exclude @OneToOne private Recipe recipe;
 
   @Lob private String recipeNotes;
 }

@@ -3,6 +3,7 @@ package guru.springframework.domain;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ public class Recipe {
 
   @Lob private String directions;
 
+  @ToString.Exclude
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe", fetch = FetchType.EAGER)
   private Set<Ingredient> ingredients = new HashSet<>();
 
@@ -36,6 +38,7 @@ public class Recipe {
   @OneToOne(cascade = CascadeType.ALL)
   private Notes notes;
 
+  @ToString.Exclude
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "recipe_category",

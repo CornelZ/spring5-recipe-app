@@ -1,9 +1,14 @@
 package guru.springframework.domain;
 
-import javax.persistence.*;
+import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import java.util.Set;
+import lombok.ToString;
 
 /** Created by jt on 6/13/17. */
 @Data
@@ -17,6 +22,7 @@ public class Category {
 
   private String description;
 
+  @ToString.Exclude
   @ManyToMany(mappedBy = "categories")
   private Set<Recipe> recipes;
 }
