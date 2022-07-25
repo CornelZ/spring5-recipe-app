@@ -1,7 +1,6 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.IngredientCommand;
-import guru.springframework.commands.RecipeCommand;
 import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
@@ -80,7 +79,8 @@ public class IngredientController {
   public String newIngredient(@PathVariable String recipeId, Model model) {
 
     // make sure we have a good id value
-    RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+    // RecipeCommand recipeCommand =
+    recipeService.findCommandById(Long.valueOf(recipeId));
     // TODO raise exception if null
 
     // need to return back parent id for hidden form property
