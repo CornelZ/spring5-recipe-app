@@ -52,9 +52,7 @@ public class RecipeController {
     if (bindingResult.hasErrors()) {
       bindingResult
           .getAllErrors()
-          .forEach(
-              objectError -> //
-              log.error("objectError: {}", objectError));
+          .forEach(objectError -> log.error("objectError: {}", objectError));
       return RECIPE_RECIPEFORM_URL;
     }
     RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
